@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css" />
+  </head>
+  <body>
+    Hi Admin!
+
+    <h1>Create Collage ID</h1>
+    <form hx-post="/admin/panel/createcollage">
+      <input type="text" name="collageID" placeholder="Collage ID" />
+      <button>Generate</button>
+    </form>
+
+    <h1>Student Bulk Register</h1>
+
+    <form
+      id="studentForm"
+      enctype="multipart/form-data"
+      hx-post="/admin/panel/register/student"
+    >
+      <input type="file" name="file" id="file" />
+      <button type="submit">Submit</button>
+    </form>
+
+    <h1>Student Register</h1>
+    <form
+      id="studentForm"
+      enctype="multipart/form-data"
+      hx-post="/admin/panel/register/singlestudent"
+    >
+      <input
+        type="text"
+        name="name"
+        id="Name"
+        placeholder="Name of the Student"
+      />
+      <input type="text" name="email" id="Name" placeholder="Email" />
+      <input
+        type="text"
+        name="password"
+        id="Name"
+        placeholder="Password Hash"
+      />
+      <input type="text" name="collageID" id="Name" placeholder="Collage ID" />
+      <input type="text" name="mentorID" id="Name" placeholder="Mentor ID" />
+      <button type="submit">Submit</button>
+    </form>
+
+    <h1>Mentor Bulk Register</h1>
+    <form
+      id="mentorForm"
+      enctype="multipart/form-data"
+      hx-post="/admin/panel/register/mentor"
+    >
+      <input type="file" name="file" id="file" />
+      <button type="submit">Submit</button>
+    </form>
+    <h1>Mentor Register</h1>
+    <form
+      id="studentForm"
+      enctype="multipart/form-data"
+      hx-post="/admin/panel/register/singlementor"
+    >
+      <input
+        type="text"
+        name="name"
+        id="Name"
+        placeholder="Name of the Mentor"
+      />
+      <input type="text" name="email" id="Name" placeholder="Email" />
+      <input
+        type="text"
+        name="password"
+        id="Name"
+        placeholder="Password Hash"
+      />
+      <input
+        type="number"
+        name="phnumber"
+        id="Name"
+        placeholder="Phone Number"
+      />
+      <button type="submit">Submit</button>
+    </form>
+
+    <h1>Password Hash Generator</h1>
+    <form
+      id="passForm"
+      enctype="multipart/form-data"
+      hx-post="/admin/panel/password/gen"
+    >
+      <input type="text" name="password" id="password" />
+      <button type="submit">Submit</button>
+    </form>
+    <h1>Edit student list</h1>
+
+    <form
+      hx-post="/admin/panel/collage/id"
+      hx-trigger="submit"
+      hx-refresh="true"
+      hx-ext="ResponseUrl"
+    >
+      <select name="collageId">
+        <option value="">Select a Collage ID</option>
+        {{ range .Table }}
+        <option value="{{ .TableName }}">{{ .TableName }}</option>
+        {{ end }}
+      </select>
+      <button type="submit">Submit</button>
+    </form>
+    <h1>Mentor List</h1>
+    <button><a href="/admin/panel/mentors">Mentor List</a></button>
+    <h1>Mentor mapping to collage</h1>
+    <form hx-post="/admin/panel/mentormapping" hx-trigger="submit">
+      <input
+        type="text"
+        name="mentorID"
+        id=""
+        placeholder="Enter mentor ID to map to a collage"
+      />
+      <select name="collageId">
+        <option value="">Select a Collage ID</option>
+        {{ range .Table }}
+        <option value="{{ .TableName }}">{{ .TableName }}</option>
+        {{ end }}
+      </select>
+      <button type="submit">Submit</button>
+    </form>
+
+    <button hx-post="/logout" hx-ext="redirectToResponseUrl">Log out</button>
+
+    <script src="https://unpkg.com/htmx.org/dist/htmx.js"></script>
+    <script>
+      htmx.defineExtension('redirectToResponseUrl', {
+        transformResponse: function (text, xhr) {
+          globalThis.document.location = xhr.responseURL
+          return 'Logging out....'
+        },
+      })
+      htmx.defineExtension('ResponseUrl', {
+        transformResponse: function (text, xhr) {
+          globalThis.document.location = xhr.responseURL
+          return 'Loading....'
+        },
+      })
+    </script>
+  </body>
+</html>
